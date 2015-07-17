@@ -10,7 +10,7 @@ import (
 
 func outside() {
 
-	fmt.Println("zazu")
+	fmt.Println("other")
 
 
 

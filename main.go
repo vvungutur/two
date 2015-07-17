@@ -43,6 +43,7 @@ func main(){
 	go sender(c)
 	go receiver(c)
 
+	outside()
 	var input string
 
 	fmt.Scanln(&input)
