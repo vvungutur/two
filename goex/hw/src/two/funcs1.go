@@ -8,6 +8,6 @@ import (
 
 func alt() {
 
-  fmt.Println(and goodbye)
+  fmt.Println("and goodbye")
   
-  }
+}
