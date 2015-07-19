@@ -42,4 +42,5 @@ func main() {
 
 		fmt.Printf("%s is length %d\n", url, pageLength)
 	}
+	fmt.Println("ok done now")
 }
