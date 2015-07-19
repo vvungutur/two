@@ -51,9 +51,10 @@ func main() {
 	d := make(chan string)
 	c := make(chan string)
 
-	for i := 0; i < 10; i ++{
+	for i := 0; i < len(urls); i ++{
 
 	go worker(d, c, i)
+
 
 	}
 
