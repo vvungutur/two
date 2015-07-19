@@ -51,22 +51,22 @@ func main() {
 	d := make(chan string)
 	c := make(chan string)
 
-	for i := 0; i < len(urls); i ++{
 
-	go worker(d, c, i)
-
-
-	}
-
-	for _, url := range urls {	
 	
-	d <- url
 
-
+	for idx, _ := range urls{
+		go worker(d, c, idx)
 	}
+
+
+
+	for _, url := range urls{
+		d <- url
+	}
+
 
 	for i:= 0; i < len(urls); i ++ {
 		fmt.Printf("%s\n", <- c)
 	}
-	
+
 }
