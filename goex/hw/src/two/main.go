@@ -10,15 +10,16 @@ import (
 
 
 
-func emit(wordChannel chan string, done chan bool) {
+func emit(chanChannel chan chan string, done chan bool) {
 
-
+	wordChannel := make(chan string)
+	chanChannel <- wordChannel
 	defer close (wordChannel)
 	words := []string{"The", "quick", "brown", "fox"}
 
 	i := 0
 
-	t := time.NewTimer(3 * time.Second)
+	t := time.NewTimer(2 * time.Second)
 
 	for {
 		select {
@@ -39,10 +40,12 @@ func emit(wordChannel chan string, done chan bool) {
 }
 func main() {
 
-	wordCh := make(chan string)
+	channelCh := make(chan chan string)
 	doneCh := make(chan bool)
 
-	go emit(wordCh, doneCh)
+	go emit(channelCh, doneCh)
+
+	wordCh :=  <- channelCh
 
 	for word := range wordCh{
 		fmt.Printf("%s", word)
