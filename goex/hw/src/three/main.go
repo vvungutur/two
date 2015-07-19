@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 
 )
 
@@ -28,19 +27,45 @@ func getPage(url string) (int, error) {
 	return len(body), nil
 }
 
-func main() {
+func worker (urlChan chan string, c chan string, id int){
+	
+	url := <- urlChan
+	
+	length, err := getPage(url)
+	if err == nil{
+		
+		c <- fmt.Sprintf("The length of %s is %d (process no. %d)",  url, length, id)
 
-	urls := []string {"https://google.com", "https://www.yahoo.com", "https://www.zazu.com", "https://www.github.com", "https://www.gangster.com"}
-
-	for _, url :=  range urls{
-
-		pageLength, err := getPage(url)
-
-		if err != nil{
-			os.Exit(1)
-		}
-
-		fmt.Printf("%s is length %d\n", url, pageLength)
+	} else {
+		c <- fmt.Sprintf("is fucked")
 	}
-	fmt.Println("ok done now")
+
+}
+
+
+func main() {
+  
+
+  urls := []string {"https://google.com", "https://www.yahoo.com", "https://www.zazu.com", "https://www.github.com", "https://www.facebook.com"}
+
+	d := make(chan string)
+	c := make(chan string)
+
+	for i := 0; i < 10; i ++{
+
+	go worker(d, c, i)
+
+	}
+
+	for _, url := range urls {	
+	
+	d <- url
+
+
+	}
+
+	for i:= 0; i < len(urls); i ++ {
+		fmt.Printf("%s\n", <- c)
+	}
+	
 }
